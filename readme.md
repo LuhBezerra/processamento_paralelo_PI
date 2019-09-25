@@ -1,1 +1,1 @@
-#Processamento paralelo do número PI
+# Processamento paralelo do número PI
