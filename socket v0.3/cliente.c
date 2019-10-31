@@ -9,6 +9,26 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 #include <string.h>
+#include <math.h>
+
+int parcela;
+
+float interativo()
+{
+    dividendo = pow(-1,parcela );
+    divisor = (2 * parcela) +1;
+
+    resultado = dividendo/divisor
+}
+
+float lote()
+{
+    dividendo = pow(-1,parcela );
+    divisor = (2 * parcela) +1;
+
+    resultado = dividendo/divisor
+
+}
  
 int configuracaoCliente()
 {
@@ -49,12 +69,21 @@ void Cliente(int clienteSockfd)
   char buffer_para_servidor[256];
   printf("Digite uma mensagem para o servidor: ");
    do {
- 
+        /*envia mensagem para o servidor, isso vai ser desconsiderado depois*/
         scanf("%s",buffer_para_servidor);
         fflush(stdin);
+        bzero((char *) &buffer_para_servidor, sizeof(buffer_para_servidor));
+
         /*Escreve para o servidor*/
- 
         write(clienteSockfd, buffer_para_servidor, sizeof (buffer_para_servidor));
+
+
+        /*Recebe a parcela do servidor*/
+        read(clienteSockfd, buffer_para_servidor, sizeof (buffer_para_servidor));
+        printf("Recebi: %s", buffer_para_servidor);
+        parcela = atoi(buffer_para_servidor); // converte a parcela que veio char (do servidor) em inteiro
+        bzero((char *) &buffer_para_servidor, sizeof(buffer_para_servidor));
+
  
       /*Mensagem para sair*/
     } while (strcmp(buffer_para_servidor, "sair") != 0);

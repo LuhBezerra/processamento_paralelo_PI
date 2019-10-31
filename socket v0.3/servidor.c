@@ -10,6 +10,17 @@
 #include <sys/ioctl.h>
 #include <pthread.h>
 
+int nParcelas;
+int nClientes;
+int modo;
+
+
+void funcionalidades () // So chega nessa parte se um cliente conseguir conectar-se com êxito ao servidor
+{   
+    printf("%d \n",nParcelas);
+   
+}
+
 void* Servidor(void* arg)
 {
     /*Buffer de entrada (armazena buffer do cliente)*/
@@ -17,11 +28,20 @@ void* Servidor(void* arg)
     /*Cast do ponteiro*/
     int sockEntrada = *(int *) arg;
     /*Loop "infinito"*/
-    printf("Aguardando as mensagens... ");
+    printf("Aguardando as mensagens... \n");
+    funcionalidades();
     for (;;)
     {
         /*Le o que vem do cliente*/
         read(sockEntrada, buffer_do_cliente, sizeof (buffer_do_cliente));
+        bzero((char *) &buffer_do_cliente, sizeof(buffer_do_cliente));
+
+        /*Mostrar a parcela na tela do servidor*/
+        printf("Enviando a parcela: ");
+        snprintf(buffer_do_cliente,2,"%d", nParcelas); // converte o char parcela em int parcela
+
+        /*Envia a parcela em char para o cliente*/
+        send(sockEntrada, buffer_do_cliente, strlen(buffer_do_cliente), 0); //envia 
         if (strcmp(buffer_do_cliente, "sair") != 0)
         {
             /*Se buffer == sair cai fora*/
@@ -71,12 +91,12 @@ int configuracaoServidor(int cliente)
     }
     return sockfd;
 }
- 
+
 int main(int argc, char* argv[])
 {
-    int nParcelas = atoi(argv[1]);
-    int nClientes = atoi(argv[2]);
-    int modo = atoi(argv[3]);
+    nParcelas = atoi(argv[1]);
+    nClientes = atoi(argv[2]);
+    modo = atoi(argv[3]);
 
     if (argc == 1) { //sem parametros
         fprintf(stderr,"ERRO, nenhum parametro fornecido\n");
@@ -115,7 +135,6 @@ int main(int argc, char* argv[])
             printf("Erro na Thread\n");
             exit(1);
        }
- 
         pthread_detach(thread);
     }
     exit(0);
