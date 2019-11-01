@@ -13,6 +13,7 @@
 
 int parcela;
 
+/*
 float interativo()
 {
     dividendo = pow(-1,parcela );
@@ -29,7 +30,7 @@ float lote()
     resultado = dividendo/divisor
 
 }
- 
+ */
 int configuracaoCliente()
 {
     /*Descritor do cliente*/
